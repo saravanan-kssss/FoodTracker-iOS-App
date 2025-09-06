@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodTracker - AI-Powered Tamil Cuisine Nutrition App</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Source+Serif+Pro:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Tab Navigation -->
+        <nav class="tab-navigation">
+            <button class="tab-button active" data-tab="daily">
+                <span class="tab-icon">🏠</span>
+                <span class="tab-text">Your Daily<br>Intake</span>
+            </button>
+            <button class="tab-button" data-tab="scanner">
+                <span class="tab-icon">📷</span>
+                <span class="tab-text">Food Scanner</span>
+            </button>
+            <button class="tab-button" data-tab="profile">
+                <span class="tab-icon">👤</span>
+                <span class="tab-text">Profile</span>
+            </button>
+            <button class="tab-button" data-tab="analytics">
+                <span class="tab-icon">📊</span>
+                <span class="tab-text">Analytics</span>
+            </button>
+        </nav>
+
+        <!-- Daily Intake View -->
+        <div class="tab-content active" id="daily-tab">
+            <div class="header">
+                <h1>Your Daily<br>Intake</h1>
+                <p class="date" id="current-date"></p>
+            </div>
+
+            <!-- Today's Meal Card -->
+            <div class="card meal-card">
+                <div class="meal-info">
+                    <div class="meal-image">
+                        <span class="food-icon">🍽️</span>
+                    </div>
+                    <div class="meal-details">
+                        <h3 id="latest-meal">Idli</h3>
+                        <p class="meal-type">Breakfast</p>
+                        <p class="portion">150g</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nutrition Summary -->
+            <div class="nutrition-grid">
+                <div class="card nutrition-card calories">
+                    <h4>Calories</h4>
+                    <div class="nutrition-value">
+                        <span class="value" id="calories-value">1420</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 86%"></div>
+                    </div>
+                </div>
+
+                <div class="nutrition-row">
+                    <div class="card nutrition-card protein">
+                        <h4>Protein</h4>
+                        <div class="nutrition-value">
+                            <span class="value" id="protein-value">65</span>
+                            <span class="unit">g</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 81%"></div>
+                        </div>
+                    </div>
+
+                    <div class="card nutrition-card fiber">
+                        <h4>Fibre</h4>
+                        <div class="nutrition-value">
+                            <span class="value" id="fiber-value">18</span>
+                            <span class="unit">g</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 72%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Food Entries Table -->
+            <div class="card food-entries-card">
+                <div class="entries-header">
+                    <h3>Today's Food Entries</h3>
+                    <span class="entries-count" id="entries-count">0 items</span>
+                </div>
+                <div class="food-entries-table" id="food-entries-table">
+                    <div class="no-entries" id="no-entries">
+                        <span class="no-entries-icon">🍽️</span>
+                        <p>No food entries yet</p>
+                        <small>Add your first meal to start tracking</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Food Button -->
+            <button class="add-food-btn" onclick="showAddFoodModal()">
+                <span>+</span> Add Food
+            </button>
+        </div>
+
+        <!-- Food Scanner View -->
+        <div class="tab-content" id="scanner-tab">
+            <div class="header">
+                <h1>Food Scanner</h1>
+                <p>Point your camera at food to get instant nutrition info</p>
+            </div>
+
+            <div class="scanner-container">
+                <div class="camera-viewfinder" id="camera-view">
+                    <div class="viewfinder-content">
+                        <span class="camera-icon">📷</span>
+                        <p>Tap to scan food</p>
+                        <small>Supports Tamil & International cuisine</small>
+                    </div>
+                </div>
+
+                <div class="scanner-actions">
+                    <button class="scanner-btn primary" onclick="simulateScanning()">
+                        📷 Camera
+                    </button>
+                    <button class="scanner-btn secondary" onclick="simulateGallery()">
+                        🖼️ Gallery
+                    </button>
+                    <button class="scanner-btn tertiary" onclick="resetScanner()">
+                        🔄 Reset
+                    </button>
+                </div>
+
+                <!-- Recent Scans -->
+                <div class="recent-scans">
+                    <h3>Recent Scans</h3>
+                    <div class="scan-grid">
+                        <div class="scan-item">
+                            <div class="scan-image">🥘</div>
+                            <p>Idli</p>
+                            <small>150 cal</small>
+                        </div>
+                        <div class="scan-item">
+                            <div class="scan-image">🫓</div>
+                            <p>Dosa</p>
+                            <small>300 cal</small>
+                        </div>
+                        <div class="scan-item">
+                            <div class="scan-image">🍚</div>
+                            <p>Rice</p>
+                            <small>200 cal</small>
+                        </div>
+                        <div class="scan-item">
+                            <div class="scan-image">🍛</div>
+                            <p>Curry</p>
+                            <small>180 cal</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile View -->
+        <div class="tab-content" id="profile-tab">
+            <div class="header">
+                <h1>Profile</h1>
+            </div>
+
+            <div class="card profile-card">
+                <div class="profile-avatar">
+                    <span class="avatar-icon">👤</span>
+                </div>
+                <div class="profile-header">
+                    <h3 id="profile-name">User Profile</h3>
+                    <button class="edit-profile-btn" onclick="showEditProfileModal()">
+                        ✏️ Edit Profile
+                    </button>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat">
+                        <p>Height</p>
+                        <strong id="profile-height">172 cm</strong>
+                    </div>
+                    <div class="stat">
+                        <p>Weight</p>
+                        <strong id="profile-weight">63 kg</strong>
+                    </div>
+                    <div class="stat">
+                        <p>Age</p>
+                        <strong id="profile-age">30</strong>
+                    </div>
+                    <div class="stat">
+                        <p>Gender</p>
+                        <strong id="profile-gender">Male</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card goal-card">
+                <div class="goal-header">
+                    <h3>Daily Calorie Goal</h3>
+                    <span class="ai-badge">AI Recommended</span>
+                </div>
+                <div class="goal-value">
+                    <span class="big-number" id="daily-calorie-goal">1650</span>
+                    <span class="unit">calories</span>
+                </div>
+                <p class="goal-description">Based on your BMR and activity level</p>
+                <small id="bmr-display">BMR: 1179 cal/day</small>
+            </div>
+
+            <div class="card stats-card">
+                <h3>This Week</h3>
+                <div class="weekly-stats">
+                    <div class="stat">
+                        <span class="stat-icon">🍽️</span>
+                        <strong>21</strong>
+                        <p>Meals Logged</p>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-icon">🔥</span>
+                        <strong>1420</strong>
+                        <p>Avg Calories</p>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-icon">📅</span>
+                        <strong>5</strong>
+                        <p>Days Active</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics View -->
+        <div class="tab-content" id="analytics-tab">
+            <div class="header">
+                <h1>Analytics</h1>
+                <p>Track your nutrition progress over time</p>
+            </div>
+
+            <div class="card weekly-summary">
+                <div class="summary-header">
+                    <h3>Weekly Summary</h3>
+                    <div class="day-selector">
+                        <span class="day">D</span>
+                        <span class="day">M</span>
+                        <span class="day">T</span>
+                        <span class="day active">W</span>
+                        <span class="day">T</span>
+                        <span class="day">F</span>
+                        <span class="day">S</span>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="bar-chart">
+                        <div class="bar" style="height: 45%"></div>
+                        <div class="bar" style="height: 52%"></div>
+                        <div class="bar" style="height: 60%"></div>
+                        <div class="bar active" style="height: 48%"></div>
+                        <div class="bar" style="height: 55%"></div>
+                        <div class="bar" style="height: 42%"></div>
+                        <div class="bar" style="height: 38%"></div>
+                    </div>
+                </div>
+
+                <div class="summary-stats">
+                    <div class="stat">
+                        <strong>1650</strong>
+                        <p>Calories</p>
+                    </div>
+                    <div class="stat">
+                        <strong>1420</strong>
+                        <p>Avg Daily</p>
+                    </div>
+                    <div class="stat">
+                        <strong>5/7</strong>
+                        <p>Goal Met</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card insights-card">
+                <h3>AI Insights</h3>
+                <div class="insights">
+                    <div class="insight success">
+                        <span class="insight-icon">💡</span>
+                        <div>
+                            <h4>Great Progress!</h4>
+                            <p>You've been consistent with logging meals this week. Your average calorie intake is well-balanced.</p>
+                        </div>
+                    </div>
+                    <div class="insight warning">
+                        <span class="insight-icon">🌿</span>
+                        <div>
+                            <h4>Increase Fiber</h4>
+                            <p>Consider adding more vegetables and whole grains to reach your daily fiber goal of 25g.</p>
+                        </div>
+                    </div>
+                    <div class="insight info">
+                        <span class="insight-icon">🔥</span>
+                        <div>
+                            <h4>Tamil Cuisine Balance</h4>
+                            <p>Your Tamil cuisine choices are nutritionally balanced. Keep exploring traditional recipes!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal" id="edit-profile-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Profile</h3>
+                <button class="close-btn" onclick="closeEditProfileModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="edit-name" placeholder="Enter your name">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Height (cm)</label>
+                        <input type="number" id="edit-height" placeholder="172" min="100" max="250">
+                    </div>
+                    <div class="form-group">
+                        <label>Weight (kg)</label>
+                        <input type="number" id="edit-weight" placeholder="63" min="30" max="200">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Age</label>
+                        <input type="number" id="edit-age" placeholder="30" min="13" max="120">
+                    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select id="edit-gender">
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Activity Level</label>
+                    <select id="edit-activity">
+                        <option value="sedentary">Sedentary (little/no exercise)</option>
+                        <option value="light" selected>Light (light exercise 1-3 days/week)</option>
+                        <option value="moderate">Moderate (moderate exercise 3-5 days/week)</option>
+                        <option value="active">Active (hard exercise 6-7 days/week)</option>
+                        <option value="very-active">Very Active (very hard exercise, physical job)</option>
+                    </select>
+                </div>
+                <button class="save-btn" onclick="saveProfile()">Save Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Food Modal -->
+    <div class="modal" id="add-food-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Food</h3>
+                <button class="close-btn" onclick="closeAddFoodModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Food Name</label>
+                    <input type="text" id="food-name" placeholder="Enter food name (e.g., Idli, Apple, Rice)" oninput="searchFoodSuggestions()">
+                    <div class="food-suggestions" id="food-suggestions"></div>
+                </div>
+                <div class="quantity-section">
+                    <div class="quantity-toggle">
+                        <label class="toggle-label">
+                            <input type="radio" name="quantity-type" value="preset" checked onchange="toggleQuantityType()">
+                            <span>Preset Quantities</span>
+                        </label>
+                        <label class="toggle-label">
+                            <input type="radio" name="quantity-type" value="custom" onchange="toggleQuantityType()">
+                            <span>Custom Grams</span>
+                        </label>
+                    </div>
+                    
+                    <div class="preset-quantity" id="preset-quantity">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Quantity</label>
+                                <select id="quantity-amount">
+                                    <option value="0.5">0.5</option>
+                                    <option value="1" selected>1</option>
+                                    <option value="1.5">1.5</option>
+                                    <option value="2">2</option>
+                                    <option value="2.5">2.5</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Unit</label>
+                                <select id="quantity-unit" onchange="updateNutritionPreview()">
+                                    <option value="piece">Piece</option>
+                                    <option value="cup">Cup</option>
+                                    <option value="bowl">Bowl</option>
+                                    <option value="50g">50g</option>
+                                    <option value="100g" selected>100g</option>
+                                    <option value="150g">150g</option>
+                                    <option value="200g">200g</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="custom-quantity" id="custom-quantity" style="display: none;">
+                        <div class="form-group">
+                            <label>Custom Quantity (grams)</label>
+                            <input type="number" id="custom-grams" placeholder="Enter grams (e.g., 75, 125, 300)" min="1" max="2000" onchange="updateNutritionPreview()">
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="ai-calculate-btn" onclick="calculateNutritionAI()">
+                    🤖 Calculate Nutrition with AI
+                </button>
+                <div class="nutrition-preview" id="nutrition-preview" style="display: none;">
+                    <h4>📊 Nutrition Preview</h4>
+                    <div class="preview-grid">
+                        <div class="preview-item">
+                            <span class="preview-label">Calories</span>
+                            <span class="preview-value" id="preview-calories">-</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="preview-label">Protein</span>
+                            <span class="preview-value" id="preview-protein">- g</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="preview-label">Fiber</span>
+                            <span class="preview-value" id="preview-fiber">- g</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="preview-label">Carbs</span>
+                            <span class="preview-value" id="preview-carbs">- g</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row three-col" style="margin-top: 16px;">
+                    <div class="form-group">
+                        <label>Calories</label>
+                        <input type="number" id="calories" placeholder="Auto-calculated" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Protein (g)</label>
+                        <input type="number" id="protein" placeholder="Auto-calculated" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Fiber (g)</label>
+                        <input type="number" id="fiber" placeholder="Auto-calculated" readonly>
+                    </div>
+                </div>
+                <div class="meal-type-selector">
+                    <label>Meal Type</label>
+                    <div class="meal-types">
+                        <button class="meal-type active" data-meal="breakfast">🌅 Breakfast</button>
+                        <button class="meal-type" data-meal="lunch">☀️ Lunch</button>
+                        <button class="meal-type" data-meal="dinner">🌙 Dinner</button>
+                        <button class="meal-type" data-meal="snack">🍃 Snack</button>
+                    </div>
+                </div>
+                <button class="save-btn" onclick="saveFoodLog()">Save Food Log</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Food Modal -->
+    <div class="modal" id="edit-food-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Food Entry</h3>
+                <button class="close-btn" onclick="closeEditFoodModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-food-id">
+                <div class="form-group">
+                    <label>Food Name</label>
+                    <input type="text" id="edit-food-name" placeholder="Enter food name" oninput="searchEditFoodSuggestions()">
+                    <div class="food-suggestions" id="edit-food-suggestions"></div>
+                </div>
+                <div class="quantity-section">
+                    <div class="quantity-toggle">
+                        <label class="toggle-label">
+                            <input type="radio" name="edit-quantity-type" value="preset" checked onchange="toggleEditQuantityType()">
+                            <span>Preset Quantities</span>
+                        </label>
+                        <label class="toggle-label">
+                            <input type="radio" name="edit-quantity-type" value="custom" onchange="toggleEditQuantityType()">
+                            <span>Custom Grams</span>
+                        </label>
+                    </div>
+                    
+                    <div class="preset-quantity" id="edit-preset-quantity">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Quantity</label>
+                                <select id="edit-quantity-amount">
+                                    <option value="0.5">0.5</option>
+                                    <option value="1" selected>1</option>
+                                    <option value="1.5">1.5</option>
+                                    <option value="2">2</option>
+                                    <option value="2.5">2.5</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Unit</label>
+                                <select id="edit-quantity-unit" onchange="updateEditNutritionPreview()">
+                                    <option value="piece">Piece</option>
+                                    <option value="cup">Cup</option>
+                                    <option value="bowl">Bowl</option>
+                                    <option value="50g">50g</option>
+                                    <option value="100g" selected>100g</option>
+                                    <option value="150g">150g</option>
+                                    <option value="200g">200g</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="custom-quantity" id="edit-custom-quantity" style="display: none;">
+                        <div class="form-group">
+                            <label>Custom Quantity (grams)</label>
+                            <input type="number" id="edit-custom-grams" placeholder="Enter grams" min="1" max="2000" onchange="updateEditNutritionPreview()">
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="ai-calculate-btn" onclick="calculateEditNutritionAI()">
+                    🤖 Recalculate Nutrition with AI
+                </button>
+                <div class="nutrition-preview" id="edit-nutrition-preview" style="display: none;">
+                    <h4>📊 Nutrition Preview</h4>
+                    <div class="preview-grid">
+                        <div class="preview-item">
+                            <span class="preview-label">Calories</span>
+                            <span class="preview-value" id="edit-preview-calories">-</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="preview-label">Protein</span>
+                            <span class="preview-value" id="edit-preview-protein">- g</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="preview-label">Fiber</span>
+                            <span class="preview-value" id="edit-preview-fiber">- g</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="preview-label">Carbs</span>
+                            <span class="preview-value" id="edit-preview-carbs">- g</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row three-col" style="margin-top: 16px;">
+                    <div class="form-group">
+                        <label>Calories</label>
+                        <input type="number" id="edit-calories" placeholder="Auto-calculated" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Protein (g)</label>
+                        <input type="number" id="edit-protein" placeholder="Auto-calculated" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Fiber (g)</label>
+                        <input type="number" id="edit-fiber" placeholder="Auto-calculated" readonly>
+                    </div>
+                </div>
+                <div class="meal-type-selector">
+                    <label>Meal Type</label>
+                    <div class="meal-types">
+                        <button class="meal-type" data-meal="breakfast">🌅 Breakfast</button>
+                        <button class="meal-type" data-meal="lunch">☀️ Lunch</button>
+                        <button class="meal-type" data-meal="dinner">🌙 Dinner</button>
+                        <button class="meal-type" data-meal="snack">🍃 Snack</button>
+                    </div>
+                </div>
+                <button class="save-btn" onclick="updateFoodLog()">Update Food Entry</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
